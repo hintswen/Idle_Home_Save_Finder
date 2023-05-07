@@ -1,3 +1,24 @@
+function GetLastLineWithPattern($filePath, $pattern) {
+    $fileStream = New-Object System.IO.FileStream($filePath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+    $reader = New-Object System.IO.StreamReader($fileStream, [System.Text.Encoding]::Default)
+    $lastLineWithPattern = $null
+
+    try {
+        while (($line = $reader.ReadLine()) -ne $null) {
+            if ($line -match $pattern) {
+                $lastLineWithPattern = $line
+                break
+            }
+        }
+    }
+    finally {
+        $reader.Close()
+        $fileStream.Close()
+    }
+
+    return $lastLineWithPattern
+}
+
 # Set the target directory
 $directory = Join-Path -Path $env:APPDATA -ChildPath '..\LocalLow\VRChat\VRChat'
 
@@ -7,16 +28,10 @@ $files = Get-ChildItem -Path $directory -Filter "*.txt" | Sort-Object LastWriteT
 # Initialize the matched string variable
 $matchedString = $null
 
-# Write to output so user knows this is running
-Write-Host "Looking for save data, this may take awhile if you have many log files or large log files"
-
 # Iterate through the files
 foreach ($file in $files) {
-    # Get the content of the file
-    $content = Get-Content -Path $file.FullName
-
-    # Find the last line containing "[🦀 Idle Home 🦀]"
-    $lastLineWithPattern = $content | Where-Object { $_ -match "\[🦀 Idle Home 🦀\]" } | Select-Object -Last 1
+    # Find the last line containing "[🦀 Idle Home 🦀] Saved"
+    $lastLineWithPattern = GetLastLineWithPattern -filePath $file.FullName -pattern "\[🦀 Idle Home 🦀\] Saved"
 
     # Check the last line with the save data
     if ($null -ne $lastLineWithPattern) {
