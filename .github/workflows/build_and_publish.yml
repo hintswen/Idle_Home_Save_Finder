@@ -13,7 +13,7 @@ jobs:
           $scriptPath = "find_save.ps1"
           $outputPath = "find_save.exe"
           Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
-          shell: powershell
+        shell: powershell
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
