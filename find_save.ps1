@@ -7,7 +7,7 @@ function GetLastLineWithPattern($filePath, $pattern) {
         while (($line = $reader.ReadLine()) -ne $null) {
             if ($line -match $pattern) {
                 $lastLineWithPattern = $line
-                break
+                # Removed break statement
             }
         }
     }
