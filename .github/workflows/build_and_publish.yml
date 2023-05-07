@@ -9,20 +9,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Compile PowerShell script to EXE
         run: |
-          try {
-            Install-Module PS2EXE -Scope CurrentUser -Force
-          } catch {
-            Write-Error "Failed to install PS2EXE: $_"
-            exit 1
-          }
-          $scriptPath = ".\find_save.ps1"
-          $outputPath = ".\find_save.exe"
-          try {
-            Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
-          } catch {
-            Write-Error "Failed to compile script: $_"
-            exit 1
-          }
+          Install-Module PS2EXE -Scope CurrentUser -Force
+          $scriptPath = "find_save.ps1"
+          $outputPath = "find_save.exe"
+          Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
+          shell: powershell
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
