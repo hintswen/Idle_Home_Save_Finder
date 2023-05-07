@@ -15,8 +15,8 @@ jobs:
             Write-Error "Failed to install PS2EXE: $_"
             exit 1
           }
-          $scriptPath = "find_save.ps1"
-          $outputPath = "find_save.exe"
+          $scriptPath = ".\find_save.ps1"
+          $outputPath = ".\find_save.exe"
           try {
             Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
           } catch {
