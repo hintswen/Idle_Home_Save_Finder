@@ -6,7 +6,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout repository
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
       - name: Compile PowerShell script to EXE
       run: |
         Install-Module PS2EXE -Scope CurrentUser -Force
