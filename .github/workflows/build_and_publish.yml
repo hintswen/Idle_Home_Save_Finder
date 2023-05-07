@@ -1,0 +1,37 @@
+name: Build and publish
+on: [push]
+jobs:
+  build:
+    name: Build and publish
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v3
+      
+      - name: Compile PowerShell script to EXE
+      run: |
+        Install-Module PS2EXE -Scope CurrentUser -Force
+        $scriptPath = "find_save.ps1"
+        $outputPath = "find_save.exe"
+        Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
+        
+      - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        
+      - name: Upload EXE to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./find_save.exe
+          asset_name: find_save.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
