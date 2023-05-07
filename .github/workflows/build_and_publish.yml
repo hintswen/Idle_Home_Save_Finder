@@ -8,11 +8,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Compile PowerShell script to EXE
-      run: |
-        Install-Module PS2EXE -Scope CurrentUser -Force
-        $scriptPath = "find_save.ps1"
-        $outputPath = "find_save.exe"
-        Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
+        run: |
+          Install-Module PS2EXE -Scope CurrentUser -Force
+          $scriptPath = "find_save.ps1"
+          $outputPath = "find_save.exe"
+          Invoke-PS2EXE -InputFile $scriptPath -OutputFile $outputPath -NoConsole -RequireAdmin
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
